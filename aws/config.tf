@@ -1,20 +1,20 @@
-# terraform {
-#   backend "s3" {
-#     bucket = "<SOME_BUCKET>"
-#     key    = "<SOME_DOMAIN>"
-#     region = "<SOME_REGION>"
-#   }
-# }
-# data "terraform_remote_state" "network" {
-#   backend = "s3"
-#   config {
-#     bucket = "<SOME_BUCKET>"
-#     key    = "${var.name}.${var.domain}/ipa"
-#     region = "${var.region}"
-#   }
-# }
+terraform {
+  backend "s3" {
+    bucket = "siliconhills-terraform"
+    key    = "orch.siliconhills.co/orch"
+    region = "us-west-2"
+  }
+}
+data "terraform_remote_state" "network" {
+  backend = "s3"
+  config = {
+    bucket = "siliconhills-terraform"
+    key    = "${var.name}.${var.domain}/orch"
+    region = "${var.region}"
+  }
+}
 provider "aws" {
-  region                  = "${var.region}"
+  region = "${var.region}"
   shared_credentials_file = "~/.aws/credentials"
 }
 variable "region" {
@@ -27,6 +27,7 @@ variable "name" {
 }
 variable "domain" {
   type    = "string"
+  default = "siliconhills.co"
 }
 variable "volume_size" {
   type    = "string"
