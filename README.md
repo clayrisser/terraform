@@ -36,6 +36,7 @@ aws configure
 ```sh
 cd aws
 terraform init
+terraform state push .terraform/terraform.tfstate
 terraform apply
 ```
 
