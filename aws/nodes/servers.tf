@@ -4,20 +4,20 @@ module "autospotting" {
   source                       = "github.com/autospotting/terraform-aws-autospotting?ref=master"
 }
 
-resource "aws_instance" "node" {
-  ami                         = "${var.ami}"
-  instance_type               = "${var.instance_type}"
-  key_name                    = "${aws_key_pair.ssh_key.key_name}"
-  security_groups             = ["${aws_security_group.node.name}"]
-  user_data                   = "${data.template_file.cloudconfig.rendered}"
-  root_block_device  {
-    volume_type = "gp2"
-    volume_size = "${var.volume_size}"
-  }
-  tags = {
-    Name = "${var.name}"
-  }
-}
+# resource "aws_instance" "node" {
+#   ami                         = "${var.ami}"
+#   instance_type               = "${var.instance_type}"
+#   key_name                    = "${aws_key_pair.ssh_key.key_name}"
+#   security_groups             = ["${aws_security_group.node.name}"]
+#   user_data                   = "${data.template_file.cloudconfig.rendered}"
+#   root_block_device  {
+#     volume_type = "gp2"
+#     volume_size = "${var.volume_size}"
+#   }
+#   tags = {
+#     Name = "${var.name}"
+#   }
+# }
 
 resource "aws_launch_configuration" "node" {
   image_id        = "${var.ami}"
