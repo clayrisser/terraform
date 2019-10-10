@@ -19,7 +19,7 @@ resource "aws_launch_configuration" "spot_node" {
 resource "aws_autoscaling_group" "spot_nodes" {
   depends_on                = ["aws_launch_configuration.spot_node"]
   availability_zones        = ["${var.region}a", "${var.region}b", "${var.region}c"]
-  name                      = "spot-${var.name}s"
+  name                      = "spot-${var.name}"
   max_size                  = "${var.spot_desired_capacity + 2}"
   min_size                  = "${max(var.spot_desired_capacity - 2, 1)}"
   health_check_grace_period = 300

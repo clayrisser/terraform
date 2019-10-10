@@ -40,7 +40,11 @@ variable "region" {
 }
 variable "name" {
   type    = "string"
-  default = "node"
+  default = "servers"
+}
+variable "domain" {
+  type    = "string"
+  default = "siliconhills.co"
 }
 variable "volume_size" {
   type    = "string"
@@ -60,5 +64,5 @@ variable "docker_version" {
 }
 variable "ami" {
   type    = "string"
-  default = "ami-e59ae09d"
+  default = "ami-0d554a1dd1d4ed527"
 }

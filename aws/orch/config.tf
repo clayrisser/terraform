@@ -47,5 +47,5 @@ variable "docker_version" {
 }
 variable "ami" {
   type    = "string"
-  default = "ami-e59ae09d"
+  default = "ami-0d554a1dd1d4ed527"
 }
