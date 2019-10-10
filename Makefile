@@ -16,6 +16,11 @@ orch-init:
 	@cd $(PLATFORM)/orch && \
 		terraform init
 
+.PHONY: orch-init
+orch-destroy:
+	@cd $(PLATFORM)/orch && \
+		terraform destroy
+
 .PHONY: nodes
 nodes: nodes-init
 	@cd $(PLATFORM)/nodes && \
