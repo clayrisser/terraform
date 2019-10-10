@@ -23,8 +23,13 @@ variable "aws_access_key" {
 variable "aws_secret_key" {
   type = "string"
 }
-variable "desired_capacity" {
+variable "dedicated_desired_capacity" {
   type    = "string"
+  default = "1"
+}
+variable "spot_desired_capacity" {
+  type    = "string"
+  default = "2"
 }
 variable "command" {
   type    = "string"
@@ -41,9 +46,13 @@ variable "volume_size" {
   type    = "string"
   default = "40"
 }
-variable "instance_type" {
+variable "dedicated_instance_type" {
   type    = "string"
   default = "t2.medium"
+}
+variable "spot_instance_type" {
+  type    = "string"
+  default = "t2.large"
 }
 variable "docker_version" {
   type    = "string"
