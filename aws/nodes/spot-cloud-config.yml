@@ -7,9 +7,8 @@ write_files:
       #!/bin/bash
       mkdir -p /var/log/boot
       exec > /var/log/boot/cloud-config.log 2>&1
-      export INSTANCE_ID=$(wget -qO- http://169.254.169.254/latest/meta-data/instance-id)
       wait-for-docker
-      echo 'docker run --rm radial/busyboxplus:curl curl $@' > /usr/bin/curl && chmod +x /usr/bin/curl
+      export INSTANCE_ID=$(wget -qO- http://169.254.169.254/latest/meta-data/instance-id)
       export SPOT=$(docker run --rm \
         -e AWS_ACCESS_KEY_ID="${aws_access_key}" \
         -e AWS_SECRET_ACCESS_KEY="${aws_secret_key}" \
@@ -19,6 +18,7 @@ write_files:
       export LIFECYCLE=$([[ -z "$SPOT" ]] && echo "dedicated" || echo "spot")
       ${command} --label group=spot --label lifecycle=$LIFECYCLE --label instanceId=$(docker run rancher/curl http://169.254.169.254/latest/meta-data/instance-id)
 rancher:
+  console: ubuntu
   docker:
     engine: ${docker_version}
     log_driver: "json-file"
@@ -26,5 +26,10 @@ rancher:
       max-file: "3"
       max-size: "100m"
       labels: "production"
-  services_include:
-    kernel-headers: true
+  services:
+    user-volumes:
+      volumes:
+        - /etc/kubernetes:/etc/kubernetes
+        - /home:/home
+        - /opt:/opt
+        - /var/lib/kubelet:/var/lib/kubelet

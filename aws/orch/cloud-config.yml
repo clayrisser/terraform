@@ -9,13 +9,13 @@ write_files:
       exec > /var/log/boot/cloud-config.log 2>&1
       export INSTANCE_ID=$(wget -qO- http://169.254.169.254/latest/meta-data/instance-id)
       wait-for-docker
-      echo 'docker run --rm radial/busyboxplus:curl curl $@' > /usr/bin/curl && chmod +x /usr/bin/curl
       docker run -d --name rancher \
         -v /var/lib/rancher:/var/lib/rancher \
         -p 80:80 -p 443:443 \
         rancher/rancher:${rancher_version} \
         --acme-domain ${name}.${domain}
 rancher:
+  console: ubuntu
   docker:
     engine: ${docker_version}
     log_driver: "json-file"
