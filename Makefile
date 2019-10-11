@@ -6,20 +6,34 @@ AWS_SECRET_ACCESS_KEY := $(shell python3 aws_credentials.py aws_secret_access_ke
 .PHONY: all
 all:
 
+.PHONY: clean
+clean:
+	@git clean -fXd
+
 .PHONY: orch
 orch: orch-init
 	@cd $(PLATFORM)/orch && \
 		terraform apply
+
+.PHONY: orch-push
+orch-push: orch-init
+	@cd $(PLATFORM)/orch && \
+		terraform state push .terraform/terraform.tfstate
 
 .PHONY: orch-init
 orch-init:
 	@cd $(PLATFORM)/orch && \
 		terraform init
 
-.PHONY: orch-init
+.PHONY: orch-destroy
 orch-destroy:
 	@cd $(PLATFORM)/orch && \
 		terraform destroy
+
+.PHONY: nodes-push
+nodes-push: nodes-init
+	@cd $(PLATFORM)/nodes && \
+		terraform state push .terraform/terraform.tfstate
 
 .PHONY: nodes
 nodes: nodes-init
@@ -33,7 +47,7 @@ nodes-init:
 	@cd $(PLATFORM)/nodes && \
 		terraform init
 
-.PHONY: nodes-init
+.PHONY: nodes-destroy
 nodes-destroy:
 	@cd $(PLATFORM)/nodes && \
 		terraform destroy \

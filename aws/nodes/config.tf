@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "siliconhills-terraform"
-    key    = "orch.siliconhills.co/nodes"
+    key    = "orch.siliconhills.dev/nodes"
     region = "us-west-2"
   }
 }
@@ -9,7 +9,7 @@ data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
     bucket = "siliconhills-terraform"
-    key    = "orch.siliconhills.co/nodes"
+    key    = "orch.siliconhills.dev/nodes"
     region = "us-west-2"
   }
 }
@@ -44,7 +44,7 @@ variable "name" {
 }
 variable "domain" {
   type    = "string"
-  default = "siliconhills.co"
+  default = "siliconhills.dev"
 }
 variable "volume_size" {
   type    = "string"
