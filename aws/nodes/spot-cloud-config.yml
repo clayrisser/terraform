@@ -8,6 +8,9 @@ write_files:
       mkdir -p /var/log/boot
       exec > /var/log/boot/cloud-config.log 2>&1
       wait-for-docker
+      ros s enable open-iscsi
+      ros s up open-iscsi
+      system-docker rm all-volumes
       export INSTANCE_ID=$(wget -qO- http://169.254.169.254/latest/meta-data/instance-id)
       export SPOT=$(docker run --rm \
         -e AWS_ACCESS_KEY_ID="${aws_access_key}" \
@@ -33,3 +36,4 @@ rancher:
         - /home:/home
         - /opt:/opt
         - /var/lib/kubelet:/var/lib/kubelet
+        - /var/openebs:/var/openebs
