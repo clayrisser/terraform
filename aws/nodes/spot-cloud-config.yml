@@ -30,6 +30,9 @@ rancher:
       max-size: "100m"
       labels: "production"
   services:
+    kubelet:
+      extra_binds:
+        - /var/openebs/local:/var/openebs/local
     user-volumes:
       volumes:
         - /etc/kubernetes:/etc/kubernetes

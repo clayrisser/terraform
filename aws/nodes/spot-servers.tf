@@ -5,11 +5,12 @@ module "autospotting" {
 }
 
 resource "aws_launch_configuration" "spot_node" {
-  image_id        = "${var.ami}"
-  instance_type   = "${var.spot_instance_type}"
-  key_name        = "${aws_key_pair.ssh_key.key_name}"
-  security_groups = ["${aws_security_group.node.name}"]
-  user_data       = "${data.template_file.spot_cloudconfig.rendered}"
+  iam_instance_profile = "${aws_iam_instance_profile.node.name}"
+  image_id             = "${var.ami}"
+  instance_type        = "${var.spot_instance_type}"
+  key_name             = "${aws_key_pair.ssh_key.key_name}"
+  security_groups      = ["${aws_security_group.node.name}"]
+  user_data            = "${data.template_file.spot_cloudconfig.rendered}"
   root_block_device {
     volume_type = "gp2"
     volume_size = "${var.volume_size}"
@@ -29,6 +30,11 @@ resource "aws_autoscaling_group" "spot_nodes" {
   launch_configuration      = "${aws_launch_configuration.spot_node.name}"
   lifecycle {
     create_before_destroy = true
+  }
+  tag {
+    key                 = "kubernetes.io/cluster/CLUSTER_ID"
+    value               = "owned"
+    propagate_at_launch = true
   }
   tag {
     key                 = "spot-enabled"

@@ -2,6 +2,7 @@ resource "aws_security_group" "node" {
   name        = "node"
   description = "node security group"
   tags = {
+    "kubernetes.io/cluster/CLUSTER_ID" = "owned"
     Name = "node"
   }
   ingress {
