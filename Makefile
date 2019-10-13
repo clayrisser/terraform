@@ -26,7 +26,7 @@ orch-init:
 		terraform init
 
 .PHONY: orch-destroy
-orch-destroy:
+orch-destroy: orch-init
 	@export AWS_PROFILE=$(AWS_PROFILE) && cd $(PLATFORM)/orch && \
 		terraform destroy
 
@@ -48,7 +48,7 @@ nodes-init:
 		terraform init
 
 .PHONY: nodes-destroy
-nodes-destroy:
+nodes-destroy: nodes-init
 	@export AWS_PROFILE=$(AWS_PROFILE) && cd $(PLATFORM)/nodes && \
 		terraform destroy \
       -var "aws_access_key=$(AWS_ACCESS_KEY_ID)" \

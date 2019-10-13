@@ -19,7 +19,7 @@ write_files:
         mesosphere/aws-cli ec2 describe-instances --instance-ids $INSTANCE_ID | \
         grep -o '"InstanceLifecycle": "spot"')
       export LIFECYCLE=$([[ -z "$SPOT" ]] && echo "dedicated" || echo "spot")
-      ${command} --controlplane --etcd --controlplane --label group=dedicated --label lifecycle=$LIFECYCLE --label instanceId=$(docker run rancher/curl http://169.254.169.254/latest/meta-data/instance-id)
+      ${command} --etcd --controlplane --label group=dedicated --label lifecycle=$LIFECYCLE --label instanceId=$(docker run rancher/curl http://169.254.169.254/latest/meta-data/instance-id)
 rancher:
   console: ubuntu
   docker:
