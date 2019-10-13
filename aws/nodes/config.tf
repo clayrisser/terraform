@@ -34,6 +34,9 @@ variable "spot_desired_capacity" {
 variable "command" {
   type    = "string"
 }
+variable "cluster_id" {
+  type    = "string"
+}
 variable "region" {
   type    = "string"
   default = "us-west-2"

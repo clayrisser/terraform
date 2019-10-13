@@ -11,7 +11,7 @@ resource "aws_instance" "dedicated_node" {
     volume_size = "${var.volume_size}"
   }
   tags = {
-    "kubernetes.io/cluster/CLUSTER_ID" = "owned"
+    "kubernetes.io/cluster/${var.cluster_id}" = "owned"
     Name = "${var.name}"
   }
 }

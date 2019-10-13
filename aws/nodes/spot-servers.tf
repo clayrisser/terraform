@@ -32,7 +32,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
     create_before_destroy = true
   }
   tag {
-    key                 = "kubernetes.io/cluster/CLUSTER_ID"
+    key                 = "kubernetes.io/cluster/${var.cluster_id}"
     value               = "owned"
     propagate_at_launch = true
   }
