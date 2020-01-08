@@ -1,16 +1,16 @@
 terraform {
   backend "s3" {
-    bucket = "moderngreek-terraform"
-    key    = "orch.moderngreek.us/nodes"
-    region = "us-east-1"
+    bucket = "siliconhills-terraform"
+    key    = "orch.siliconhills.dev/nodes"
+    region = "us-west-2"
   }
 }
 data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
-    bucket = "moderngreek-terraform"
-    key    = "orch.moderngreek.us/nodes"
-    region = "us-east-1"
+    bucket = "siliconhills-terraform"
+    key    = "orch.siliconhills.dev/nodes"
+    region = "us-west-2"
   }
 }
 provider "aws" {
@@ -39,7 +39,7 @@ variable "cluster_id" {
 }
 variable "region" {
   type    = "string"
-  default = "us-east-1"
+  default = "us-west-2"
 }
 variable "name" {
   type    = "string"
@@ -47,7 +47,7 @@ variable "name" {
 }
 variable "domain" {
   type    = "string"
-  default = "moderngreek.us"
+  default = "siliconhills.dev"
 }
 variable "volume_size" {
   type    = "string"
