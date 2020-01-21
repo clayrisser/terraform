@@ -29,7 +29,7 @@ variable "dedicated_desired_capacity" {
 }
 variable "spot_desired_capacity" {
   type    = "string"
-  default = "2"
+  default = "4"
 }
 variable "command" {
   type    = "string"

@@ -1,8 +1,8 @@
-module "autospotting" {
-  autospotting_regions_enabled = "${var.region}"
-  lambda_zipname               = "lambda.zip"
-  source                       = "github.com/autospotting/terraform-aws-autospotting?ref=master"
-}
+# module "autospotting" {
+#   autospotting_regions_enabled = "${var.region}"
+#   lambda_zipname               = "lambda.zip"
+#   source                       = "github.com/autospotting/terraform-aws-autospotting?ref=master"
+# }
 
 resource "aws_launch_configuration" "spot_node" {
   iam_instance_profile = "${aws_iam_instance_profile.node.name}"
@@ -15,11 +15,25 @@ resource "aws_launch_configuration" "spot_node" {
     volume_type = "gp2"
     volume_size = "${var.volume_size}"
   }
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy = true
+    ignore_changes = [
+      arn,
+      ebs_optimized,
+      id,
+      name,
+      user_data,
+      ebs_block_device,
+      root_block_device
+    ]
+  }
 }
 
 resource "aws_autoscaling_group" "spot_nodes" {
   depends_on                = ["aws_launch_configuration.spot_node"]
-  availability_zones        = ["${var.region}a", "${var.region}b", "${var.region}c"]
+  # availability_zones        = ["${var.region}a", "${var.region}b", "${var.region}c"]
+  availability_zones        = ["${var.region}a", "${var.region}c"]
   name                      = "spot-${var.name}"
   max_size                  = "${var.spot_desired_capacity + 2}"
   min_size                  = "${max(var.spot_desired_capacity - 2, 1)}"
@@ -28,9 +42,6 @@ resource "aws_autoscaling_group" "spot_nodes" {
   desired_capacity          = "${var.spot_desired_capacity}"
   force_delete              = true
   launch_configuration      = "${aws_launch_configuration.spot_node.name}"
-  lifecycle {
-    create_before_destroy = true
-  }
   tag {
     key                 = "kubernetes.io/cluster/${var.cluster_id}"
     value               = "owned"
@@ -45,6 +56,13 @@ resource "aws_autoscaling_group" "spot_nodes" {
     key                 = "Name"
     value               = "spot_${aws_launch_configuration.spot_node.name}"
     propagate_at_launch = true
+  }
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy = true
+    ignore_changes = [
+      tag
+    ]
   }
 }
 

@@ -95,4 +95,11 @@ resource "aws_security_group" "node" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy = true
+    ignore_changes = [
+      tags
+    ]
+  }
 }

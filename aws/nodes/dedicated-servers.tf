@@ -14,6 +14,43 @@ resource "aws_instance" "dedicated_node" {
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
     Name = "${var.name}"
   }
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy = true
+    ignore_changes = [
+      arn,
+      availability_zone,
+      cpu_core_count,
+      cpu_threads_per_core,
+      credit_specification,
+      disable_api_termination,
+      ebs_block_device,
+      ebs_optimized,
+      ephemeral_block_device,
+      host_id,
+      id,
+      instance_state,
+      ipv6_address_count,
+      ipv6_addresses,
+      monitoring,
+      network_interface,
+      network_interface_id,
+      password_data,
+      placement_group,
+      primary_network_interface_id,
+      private_dns,
+      private_ip,
+      public_dns,
+      public_ip,
+      root_block_device,
+      subnet_id,
+      tags,
+      tenancy,
+      user_data,
+      volume_tags,
+      vpc_security_group_ids
+    ]
+  }
 }
 
 data "template_file" "dedicated_cloudconfig" {
@@ -32,6 +69,13 @@ resource "aws_eip" "dedicated_node" {
   vpc      = true
   tags = {
     Name = "${var.name}"
+  }
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy = true
+    ignore_changes = [
+      instance
+    ]
   }
 }
 
