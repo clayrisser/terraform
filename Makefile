@@ -39,7 +39,7 @@ nodes-push: nodes-init
 		terraform state push .terraform/terraform.tfstate
 
 .PHONY: nodes
-nodes: nodes-init
+nodes: nodes-refresh
 	@export AWS_PROFILE=$(AWS_PROFILE) && cd $(PLATFORM)/nodes && \
 		terraform apply \
       -var "aws_access_key=$(AWS_ACCESS_KEY_ID)" \
