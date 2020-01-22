@@ -14,58 +14,58 @@ data "terraform_remote_state" "network" {
   }
 }
 provider "aws" {
-  region = "${var.region}"
+  region = var.region
   shared_credentials_file = "~/.aws/credentials"
 }
 variable "aws_access_key" {
-  type = "string"
+  type = string
 }
 variable "aws_secret_key" {
-  type = "string"
+  type = string
 }
 variable "dedicated_desired_capacity" {
-  type    = "string"
+  type    = string
   default = "1"
 }
 variable "spot_desired_capacity" {
-  type    = "string"
+  type    = string
   default = "4"
 }
 variable "command" {
-  type    = "string"
+  type    = string
 }
 variable "cluster_id" {
-  type    = "string"
+  type    = string
 }
 variable "region" {
-  type    = "string"
+  type    = string
   default = "us-west-2"
 }
 variable "name" {
-  type    = "string"
+  type    = string
   default = "servers"
 }
 variable "domain" {
-  type    = "string"
+  type    = string
   default = "siliconhills.dev"
 }
 variable "volume_size" {
-  type    = "string"
+  type    = string
   default = "40"
 }
 variable "dedicated_instance_type" {
-  type    = "string"
+  type    = string
   default = "t2.medium"
 }
 variable "spot_instance_type" {
-  type    = "string"
+  type    = string
   default = "t2.large"
 }
 variable "docker_version" {
-  type    = "string"
+  type    = string
   default = "18.09.4-ce"
 }
 variable "ami" {
-  type    = "string"
+  type    = string
   default = "ami-0d554a1dd1d4ed527"
 }
