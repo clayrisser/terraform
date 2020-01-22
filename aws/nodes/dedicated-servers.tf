@@ -138,9 +138,7 @@ resource "aws_eip" "dedicated_node" {
   lifecycle {
     create_before_destroy = true
     prevent_destroy = true
-    ignore_changes = [
-      instance
-    ]
+    ignore_changes = []
   }
 }
 
