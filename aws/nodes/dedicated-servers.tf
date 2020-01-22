@@ -130,7 +130,7 @@ data "template_file" "dedicated_worker_cloudconfig" {
 }
 
 resource "aws_eip" "dedicated_node" {
-  instance = aws_instance.dedicated_node.id
+  instance = aws_instance.dedicated_worker_node.id
   vpc      = true
   tags = {
     Name = var.name
