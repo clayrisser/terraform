@@ -17,7 +17,7 @@ write_files:
 
       docker stop \$RANCHER_CONTAINER_NAME
       docker create --volumes-from \$RANCHER_CONTAINER_NAME --name rancher-data-\$DATE rancher/rancher:\$RANCHER_VERSION
-      docker run --volumes-from rancher-data-\$DATE -v \$PWD/backups:/backup busybox tar zcvf /backup/rancher-data-backup-\${RANCHER_VERSION}-\${DATE}.tar.gz /var/lib/rancher
+      docker run --volumes-from rancher-data-\$DATE -v \$PWD/backups:/backup busybox tar zcvf /backup/rancher-data-backup-"\$RANCHER_VERSION"-"\$DATE".tar.gz /var/lib/rancher
       docker start \$RANCHER_CONTAINER_NAME
       EOF
 
@@ -28,7 +28,7 @@ write_files:
       export RANCHER_VERSION=${rancher_version}
 
       docker stop \$RANCHER_CONTAINER_NAME
-      docker rename \$RANCHER_CONTAINER_NAME \${RANCHER_CONTAINER_NAME}_\$(date '+%s')
+      docker rename \$RANCHER_CONTAINER_NAME "\$RANCHER_CONTAINER_NAME}"_\$(date '+%s')
       docker run -d --volumes-from rancher-data-\$DATE \
         --restart=unless-stopped \
         -p 80:80 -p 443:443 \

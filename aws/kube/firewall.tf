@@ -1,5 +1,5 @@
 resource "aws_security_group" "kube" {
-  name        = "${var.name}"
+  name        = var.name
   description = "${var.name} security group"
   ingress {
     from_port   = 22
@@ -26,6 +26,6 @@ resource "aws_security_group" "kube" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = "${var.name}"
+    Name = var.name
   }
 }

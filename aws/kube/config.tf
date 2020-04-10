@@ -14,38 +14,38 @@ data "terraform_remote_state" "network" {
   }
 }
 provider "aws" {
-  region = "${var.region}"
+  region = var.region
   shared_credentials_file = "~/.aws/credentials"
 }
 variable "region" {
-  type    = "string"
+  type    = string
   default = "us-west-2"
 }
 variable "name" {
-  type    = "string"
+  type    = string
   default = "kube"
 }
 variable "domain" {
-  type    = "string"
+  type    = string
   default = "siliconhills.dev"
 }
 variable "volume_size" {
-  type    = "string"
+  type    = string
   default = "40"
 }
 variable "instance_type" {
-  type    = "string"
+  type    = string
   default = "t2.medium"
 }
 variable "rancher_version" {
-  type    = "string"
-  default = "latest"
+  type    = string
+  default = "v2.4.2"
 }
 variable "docker_version" {
-  type    = "string"
-  default = "18.09.4-ce"
+  type    = string
+  default = "19.03.8-ce"
 }
 variable "ami" {
-  type    = "string"
-  default = "ami-0d554a1dd1d4ed527"
+  type    = string
+  default = "ami-0d5f95b9a27dfef6f"
 }
