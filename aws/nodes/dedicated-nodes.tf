@@ -1,22 +1,22 @@
-resource "aws_instance" "dedicated_node" {
+resource "aws_instance" "dedicated_etcd" {
   ami                         = var.ami
   associate_public_ip_address = true
-  iam_instance_profile        = aws_iam_instance_profile.node.name
+  iam_instance_profile        = aws_iam_instance_profile.nodes.name
   instance_type               = var.dedicated_instance_type
   key_name                    = aws_key_pair.ssh_key.key_name
-  security_groups             = [aws_security_group.node.name]
-  user_data                   = data.template_file.dedicated_cloudconfig.rendered
+  security_groups             = [aws_security_group.nodes.name]
+  user_data                   = data.template_file.dedicated_etcd_cloudconfig.rendered
   root_block_device  {
     volume_type = "gp2"
     volume_size = var.volume_size
   }
   tags = {
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
-    Name = var.name
+    Name = "${var.name}-etcd"
   }
   lifecycle {
     create_before_destroy = true
-    prevent_destroy = true
+    prevent_destroy = false
     ignore_changes = [
       ami,
       arn,
@@ -54,25 +54,25 @@ resource "aws_instance" "dedicated_node" {
   }
 }
 
-resource "aws_instance" "dedicated_worker_node" {
+resource "aws_instance" "dedicated_entrypoint" {
   ami                         = var.ami
   associate_public_ip_address = true
-  iam_instance_profile        = aws_iam_instance_profile.node.name
+  iam_instance_profile        = aws_iam_instance_profile.nodes.name
   instance_type               = var.dedicated_instance_type
   key_name                    = aws_key_pair.ssh_key.key_name
-  security_groups             = [aws_security_group.node.name]
-  user_data                   = data.template_file.dedicated_worker_cloudconfig.rendered
+  security_groups             = [aws_security_group.nodes.name]
+  user_data                   = data.template_file.dedicated_entrypoint_cloudconfig.rendered
   root_block_device  {
     volume_type = "gp2"
     volume_size = var.volume_size
   }
   tags = {
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
-    Name = "${var.name}-worker"
+    Name = "${var.name}-entrypoint"
   }
   lifecycle {
     create_before_destroy = true
-    prevent_destroy = true
+    prevent_destroy = false
     ignore_changes = [
       arn,
       ami,
@@ -109,8 +109,8 @@ resource "aws_instance" "dedicated_worker_node" {
   }
 }
 
-data "template_file" "dedicated_cloudconfig" {
-  template = file("dedicated-cloud-config.yml")
+data "template_file" "dedicated_etcd_cloudconfig" {
+  template = file("dedicated-etcd-cloud-config.yml")
   vars = {
     aws_access_key = var.aws_access_key
     aws_secret_key = var.aws_secret_key
@@ -120,8 +120,8 @@ data "template_file" "dedicated_cloudconfig" {
   }
 }
 
-data "template_file" "dedicated_worker_cloudconfig" {
-  template = file("dedicated-worker-cloud-config.yml")
+data "template_file" "dedicated_entrypoint_cloudconfig" {
+  template = file("dedicated-entrypoint-cloud-config.yml")
   vars = {
     aws_access_key = var.aws_access_key
     aws_secret_key = var.aws_secret_key
@@ -131,15 +131,15 @@ data "template_file" "dedicated_worker_cloudconfig" {
   }
 }
 
-resource "aws_eip" "dedicated_node" {
-  instance = aws_instance.dedicated_worker_node.id
+resource "aws_eip" "dedicated_entrypoint" {
+  instance = aws_instance.dedicated_entrypoint.id
   vpc      = true
   tags = {
     Name = var.name
   }
   lifecycle {
     create_before_destroy = true
-    prevent_destroy = true
+    prevent_destroy = false
     ignore_changes = []
   }
 }
@@ -148,7 +148,7 @@ resource "aws_eip" "dedicated_node" {
 #   image_id        = var.ami
 #   instance_type   = var.dedicated_instance_type
 #   key_name        = aws_key_pair.ssh_key.key_name
-#   security_groups = [aws_security_group.node.name]
+#   security_groups = [aws_security_group.nodes.name]
 #   user_data       = data.template_file.dedicated_cloudconfig.rendered
 #   root_block_device {
 #     volume_type = "gp2"
@@ -166,13 +166,13 @@ resource "aws_eip" "dedicated_node" {
 #   health_check_type         = "EC2"
 #   desired_capacity          = var.dedicated_desired_capacity
 #   force_delete              = true
-#   launch_configuration      = aws_launch_configuration.dedicated_node.name
+#   launch_configuration      = aws_launch_configuration.dedicated_nodes.name
 #   lifecycle {
 #     create_before_destroy = true
 #   }
 #   tag {
 #     key                 = "Name"
-#     value               = "dedicated_${aws_launch_configuration.dedicated_node.name}"
+#     value               = "dedicated_${aws_launch_configuration.dedicated_nodes.name}"
 #     propagate_at_launch = true
 #   }
 # }

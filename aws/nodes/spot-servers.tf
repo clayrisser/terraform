@@ -4,12 +4,12 @@
 #   source                       = "github.com/autospotting/terraform-aws-autospotting?ref=master"
 # }
 
-resource "aws_launch_configuration" "spot_node" {
-  iam_instance_profile = aws_iam_instance_profile.node.name
+resource "aws_launch_configuration" "spot_nodes" {
+  iam_instance_profile = aws_iam_instance_profile.nodes.name
   image_id             = var.ami
   instance_type        = var.spot_instance_type
   key_name             = aws_key_pair.ssh_key.key_name
-  security_groups      = [aws_security_group.node.name]
+  security_groups      = [aws_security_group.nodes.name]
   user_data            = data.template_file.spot_cloudconfig.rendered
   root_block_device {
     volume_type = "gp2"
@@ -31,7 +31,7 @@ resource "aws_launch_configuration" "spot_node" {
 }
 
 resource "aws_autoscaling_group" "spot_nodes" {
-  depends_on                = [aws_launch_configuration.spot_node]
+  depends_on                = [aws_launch_configuration.spot_nodes]
   # availability_zones        = ["${var.region}a", "${var.region}b", "${var.region}c"]
   availability_zones        = ["${var.region}a", "${var.region}c"]
   name                      = "spot-${var.name}"
@@ -41,7 +41,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
   health_check_type         = "EC2"
   desired_capacity          = var.spot_desired_capacity
   force_delete              = true
-  launch_configuration      = aws_launch_configuration.spot_node.name
+  launch_configuration      = aws_launch_configuration.spot_nodes.name
   tag {
     key                 = "kubernetes.io/cluster/${var.cluster_id}"
     value               = "owned"
@@ -54,7 +54,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
   }
   tag {
     key                 = "Name"
-    value               = "spot_${aws_launch_configuration.spot_node.name}"
+    value               = "spot_${aws_launch_configuration.spot_nodes.name}"
     propagate_at_launch = true
   }
   lifecycle {

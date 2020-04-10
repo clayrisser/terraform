@@ -8,8 +8,8 @@ write_files:
       mkdir -p /var/log/boot
       exec > /var/log/boot/cloud-config.log 2>&1
 
-      mkdir -p ~/backups
-      cat <<EOF > ~/backup.sh
+      mkdir -p /home/rancher/backups
+      cat <<EOF > /home/rancher/backup.sh
       #!/bin/sh
       export DATE=\$(date '+%s')
       export RANCHER_CONTAINER_NAME=rancher
@@ -21,14 +21,14 @@ write_files:
       docker start \$RANCHER_CONTAINER_NAME
       EOF
 
-      cat <<EOF ~/upgrade.sh
+      cat <<EOF > /home/rancher/upgrade.sh
       #!/bin/sh
       export DATE=
       export RANCHER_CONTAINER_NAME=rancher
       export RANCHER_VERSION=${rancher_version}
 
       docker stop \$RANCHER_CONTAINER_NAME
-      docker rename \$RANCHER_CONTAINER_NAME "\$RANCHER_CONTAINER_NAME}"_\$(date '+%s')
+      docker rename \$RANCHER_CONTAINER_NAME "\$RANCHER_CONTAINER_NAME"_\$(date '+%s')
       docker run -d --volumes-from rancher-data-\$DATE \
         --restart=unless-stopped \
         -p 80:80 -p 443:443 \
@@ -36,6 +36,7 @@ write_files:
         --acme-domain ${name}.${domain}
       EOF
 
+      chown -R rancher:rancher /home/rancher
       export INSTANCE_ID=$(wget -qO- http://169.254.169.254/latest/meta-data/instance-id)
       wait-for-docker
       docker run -d --name rancher \

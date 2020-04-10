@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "siliconhills-terraform"
+    bucket = "dev.siliconhills.terraform"
     key    = "kube.siliconhills.dev/kube"
     region = "us-west-2"
   }
@@ -8,7 +8,7 @@ terraform {
 data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
-    bucket = "siliconhills-terraform"
+    bucket = "dev.siliconhills.terraform"
     key    = "kube.siliconhills.dev/kube"
     region = "us-west-2"
   }

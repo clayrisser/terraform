@@ -1,5 +1,5 @@
-resource "aws_security_group" "node" {
-  name        = "node"
+resource "aws_security_group" "nodes" {
+  name        = var.name
   description = "node security group"
   tags = {
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
@@ -115,7 +115,7 @@ resource "aws_security_group" "node" {
   }
   lifecycle {
     create_before_destroy = true
-    prevent_destroy = true
+    prevent_destroy = false
     ignore_changes = [
       tags
     ]
