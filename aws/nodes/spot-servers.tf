@@ -17,7 +17,7 @@ resource "aws_launch_configuration" "spot_node" {
   }
   lifecycle {
     create_before_destroy = true
-    prevent_destroy = true
+    prevent_destroy = false
     ignore_changes = [
       arn,
       ebs_optimized,
@@ -59,7 +59,7 @@ resource "aws_autoscaling_group" "spot_nodes" {
   }
   lifecycle {
     create_before_destroy = true
-    prevent_destroy = true
+    prevent_destroy = false
     ignore_changes = [
       tag
     ]

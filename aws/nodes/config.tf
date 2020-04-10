@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "siliconhills-terraform"
-    key    = "orch.siliconhills.dev/nodes"
+    key    = "kube.siliconhills.dev/nodes"
     region = "us-west-2"
   }
 }
@@ -9,7 +9,7 @@ data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
     bucket = "siliconhills-terraform"
-    key    = "orch.siliconhills.dev/nodes"
+    key    = "kube.siliconhills.dev/nodes"
     region = "us-west-2"
   }
 }
@@ -43,7 +43,7 @@ variable "region" {
 }
 variable "name" {
   type    = string
-  default = "servers"
+  default = "nodes"
 }
 variable "domain" {
   type    = string
@@ -63,9 +63,9 @@ variable "spot_instance_type" {
 }
 variable "docker_version" {
   type    = string
-  default = "18.09.4-ce"
+  default = "19.03.8-ce"
 }
 variable "ami" {
   type    = string
-  default = "ami-0d554a1dd1d4ed527"
+  default = "ami-0d5f95b9a27dfef6f"
 }

@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "siliconhills-terraform"
-    key    = "orch.siliconhills.dev/autospotting"
+    key    = "kube.siliconhills.dev/autospotting"
     region = "us-west-2"
   }
 }
@@ -9,7 +9,7 @@ data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
     bucket = "siliconhills-terraform"
-    key    = "orch.siliconhills.dev/autospotting"
+    key    = "kube.siliconhills.dev/autospotting"
     region = "us-west-2"
   }
 }

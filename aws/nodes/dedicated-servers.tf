@@ -18,6 +18,7 @@ resource "aws_instance" "dedicated_node" {
     create_before_destroy = true
     prevent_destroy = true
     ignore_changes = [
+      ami,
       arn,
       availability_zone,
       cpu_core_count,
@@ -74,6 +75,7 @@ resource "aws_instance" "dedicated_worker_node" {
     prevent_destroy = true
     ignore_changes = [
       arn,
+      ami,
       availability_zone,
       cpu_core_count,
       cpu_threads_per_core,
