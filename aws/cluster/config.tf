@@ -49,18 +49,6 @@ variable "domain" {
   type    = string
   default = "siliconhills.dev"
 }
-variable "volume_size" {
-  type    = string
-  default = "40"
-}
-variable "dedicated_instance_type" {
-  type    = string
-  default = "t2.medium"
-}
-variable "spot_instance_type" {
-  type    = string
-  default = "t2.large"
-}
 variable "docker_version" {
   type    = string
   default = "19.03.8-ce"

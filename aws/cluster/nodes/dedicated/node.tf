@@ -2,13 +2,13 @@ resource "aws_instance" "dedicated_etcd" {
   ami                         = var.ami
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.nodes.name
-  instance_type               = var.dedicated_instance_type
+  instance_type               = "t2.medium"
   key_name                    = aws_key_pair.ssh_key.key_name
   security_groups             = [aws_security_group.nodes.name]
   user_data                   = data.template_file.dedicated_etcd_cloudconfig.rendered
   root_block_device  {
     volume_type = "gp2"
-    volume_size = var.volume_size
+    volume_size = "40"
   }
   tags = {
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
