@@ -6,22 +6,12 @@
 
 Please ★ this repo if you found it useful ★ ★ ★
 
-
-## Features
-
-* Automatically registers servers with a supported DNS provider
-    * Route 53
-    * CloudFlare
-* Adds letsencrypt certificate to Rancher
-
-
 ## Dependencies
 
 * [AWS CLI](https://aws.amazon.com/cli)
 * [Terraform](https://terraform.io)
 * [GNU Make](https://www.gnu.org/software/make)
 * [Python 3](https://www.python.org)
-
 
 ## Usage
 
@@ -31,31 +21,45 @@ Please ★ this repo if you found it useful ★ ★ ★
 aws configure
 ```
 
-### Setup Orchestration Platform
+### Deploy Rancher
 
 ```sh
-cd aws
+cd aws/rancher
+cp .env.template .env
+```
+
+Set the variables the _.env_ file
+
+```sh
+source .env
 terraform init
 terraform state push .terraform/terraform.tfstate
 terraform apply
 ```
 
-If you want to use [route53](https://aws.amazon.com/route53) instead of [cloudflare](https://www.cloudflare.com),
-set the `cloudflare_token` to `0`.
+### Deploy Cluster
 
-Make sure you save the generated rsa private key so you can ssh into the server.
-It will be located at `orch/orch_<your_domain>_rsa`.
+```sh
+cd aws/cluster
+cp .env.template .env
+```
 
+Set the variables the _.env_ file
+
+```sh
+source .env
+terraform init
+terraform state push .terraform/terraform.tfstate
+terraform apply
+```
 
 ## Support
 
 Submit an [issue](https://github.com/codejamninja/terraform-rancher/issues/new)
 
-
 ## Contributing
 
 Review the [guidelines for contributing](https://github.com/codejamninja/terraform-rancher/blob/master/CONTRIBUTING.md)
-
 
 ## License
 
@@ -63,11 +67,9 @@ Review the [guidelines for contributing](https://github.com/codejamninja/terrafo
 
 [Jam Risser](https://codejam.ninja) © 2018
 
-
 ## Changelog
 
 Review the [changelog](https://github.com/codejamninja/terraform-rancher/blob/master/CHANGELOG.md)
-
 
 ## Credits
 
