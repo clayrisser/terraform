@@ -29,14 +29,6 @@ variable "domain" {
   type    = string
   default = "siliconhills.dev"
 }
-variable "volume_size" {
-  type    = string
-  default = "40"
-}
-variable "instance_type" {
-  type    = string
-  default = "t2.medium"
-}
 variable "rancher_version" {
   type    = string
   default = "v2.4.2"
@@ -48,4 +40,8 @@ variable "docker_version" {
 variable "ami" {
   type    = string
   default = "ami-0d5f95b9a27dfef6f"
+}
+variable "availability_zone" {
+  type    = string
+  default = "a"
 }

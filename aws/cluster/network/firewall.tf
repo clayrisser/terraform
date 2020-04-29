@@ -1,4 +1,4 @@
-resource "aws_security_group" "nodes" {
+resource "aws_security_group" "cluster" {
   name        = var.name
   description = "node security group"
   tags = {

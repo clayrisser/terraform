@@ -32,10 +32,10 @@ variable "spot_desired_capacity" {
   default = "4"
 }
 variable "command" {
-  type    = string
+  type = string
 }
 variable "cluster_id" {
-  type    = string
+  type = string
 }
 variable "region" {
   type    = string
@@ -56,4 +56,8 @@ variable "docker_version" {
 variable "ami" {
   type    = string
   default = "ami-0d5f95b9a27dfef6f"
+}
+variable "availability_zones" {
+  type  = array<string>
+  default = ["a"]
 }

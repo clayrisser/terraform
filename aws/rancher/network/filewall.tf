@@ -1,6 +1,6 @@
-resource "aws_security_group" "kube" {
+resource "aws_security_group" "rancher" {
   name        = var.name
-  description = "${var.name} security group"
+  description = "rancher security group"
   ingress {
     from_port   = 22
     to_port     = 22

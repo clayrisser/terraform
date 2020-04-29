@@ -1,0 +1,43 @@
+#cloud-config
+write_files:
+  - path: /etc/rc.local
+    permissions: "0755"
+    owner: root
+    content: |
+      #!/bin/bash
+      mkdir -p /var/log/boot
+      exec > /var/log/boot/cloud-config.log 2>&1
+      wait-for-docker
+      ros s enable open-iscsi
+      ros s up open-iscsi
+      system-docker rm all-volumes
+      export INSTANCE_ID=$(wget -qO- http://169.254.169.254/latest/meta-data/instance-id)
+      export SPOT=$(docker run --rm \
+        -e AWS_ACCESS_KEY_ID="${aws_access_key}" \
+        -e AWS_SECRET_ACCESS_KEY="${aws_secret_key}" \
+        -e AWS_DEFAULT_REGION="${region}" \
+        mesosphere/aws-cli ec2 describe-instances --instance-ids $INSTANCE_ID | \
+        grep -o '"InstanceLifecycle": "spot"')
+      export LIFECYCLE=$([[ -z "$SPOT" ]] && echo "dedicated" || echo "spot")
+      ${command} --label group=dedicated --label lifecycle=$LIFECYCLE --label instanceId=$(docker run rancher/curl http://169.254.169.254/latest/meta-data/instance-id)
+rancher:
+  ssh:
+    port: 2222
+  docker:
+    engine: ${docker_version}
+    log_driver: "json-file"
+    log_opts:
+      max-file: "3"
+      max-size: "100m"
+      labels: "production"
+  services:
+    kubelet:
+      extra_binds:
+        - /var/openebs/local:/var/openebs/local
+    user-volumes:
+      volumes:
+        - /etc/kubernetes:/etc/kubernetes
+        - /home:/home
+        - /opt:/opt
+        - /var/lib/kubelet:/var/lib/kubelet
+        - /var/openebs:/var/openebs
