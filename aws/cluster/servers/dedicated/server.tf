@@ -11,7 +11,7 @@ resource "aws_launch_configuration" "dedicated" {
   }
   lifecycle {
     create_before_destroy = true
-    prevent_destroy = false
+    prevent_destroy = true
     ignore_changes = [
       arn,
       ebs_optimized,
@@ -42,8 +42,8 @@ resource "aws_autoscaling_group" "dedicated" {
   }
   tag {
     key                 = "spot-enabled"
-    value               = "true"
-    propagate_at_launch = false
+    value               = "false"
+    propagate_at_launch = true
   }
   tag {
     key                 = "Name"

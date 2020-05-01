@@ -11,7 +11,7 @@ resource "aws_launch_configuration" "spot" {
   }
   lifecycle {
     create_before_destroy = true
-    prevent_destroy = false
+    prevent_destroy = true
     ignore_changes = [
       arn,
       ebs_optimized,
