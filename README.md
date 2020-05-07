@@ -25,7 +25,6 @@ aws configure
 
 ```sh
 cd aws/rancher
-cp .env.template .env
 ```
 
 Set the variables the _.env_ file
