@@ -30,7 +30,6 @@ cd aws/rancher
 Set the variables the _.env_ file
 
 ```sh
-source .env
 terraform init
 terraform state push .terraform/terraform.tfstate
 terraform apply
