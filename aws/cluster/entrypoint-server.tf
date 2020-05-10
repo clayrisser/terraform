@@ -1,19 +1,19 @@
-resource "aws_instance" "etcd" {
+resource "aws_instance" "entrypoint" {
   ami                         = var.ami
   associate_public_ip_address = true
   availability_zone           = ["${var.region}${var.availability_zones[0]}"]
   iam_instance_profile        = aws_iam_instance_profile.cluster.name
-  instance_type               = "t2.large"
+  instance_type               = "t2.medium"
   key_name                    = aws_key_pair.ssh_key.key_name
   security_groups             = [aws_security_group.cluster.name]
-  user_data                   = data.template_file.etcd_cloudconfig.rendered
+  user_data                   = data.template_file.entrypoint_cloudconfig.rendered
   root_block_device  {
     volume_type = "gp2"
     volume_size = "40"
   }
   tags = {
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
-    Name = "${var.name}-etcd"
+    Name = "${var.name}-entrypoint"
   }
   lifecycle {
     create_before_destroy = true
@@ -55,8 +55,8 @@ resource "aws_instance" "etcd" {
   }
 }
 
-data "template_file" "etcd_cloudconfig" {
-  template = file("cloud-config.yml")
+data "template_file" "entrypoint_cloudconfig" {
+  template = file("entrypoint-cloud-config.yml")
   vars = {
     aws_access_key = var.aws_access_key
     aws_secret_key = var.aws_secret_key
