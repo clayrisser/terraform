@@ -1,8 +1,7 @@
 resource "aws_instance" "rancher" {
   ami                         = var.ami
   associate_public_ip_address = true
-  availability_zone           = ["${var.region}${var.availability_zone}"]
-  iam_instance_profile        = aws_iam_instance_profile.rancher.name
+  availability_zone           = "${var.region}${var.availability_zone}"
   instance_type               = "t2.large"
   key_name                    = aws_key_pair.ssh_key.key_name
   security_groups             = [aws_security_group.rancher.name]
