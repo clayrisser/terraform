@@ -58,6 +58,6 @@ variable "ami" {
   default = "ami-0d5f95b9a27dfef6f"
 }
 variable "availability_zones" {
-  type  = array<string>
+  type  = list(string)
   default = ["a"]
 }
