@@ -1,7 +1,7 @@
 resource "aws_instance" "entrypoint" {
   ami                         = var.ami
   associate_public_ip_address = true
-  availability_zone           = ["${var.region}${element(var.availability_zones, 0)}"]
+  availability_zone           = "${var.region}${element(var.availability_zones, 0)}"
   iam_instance_profile        = aws_iam_instance_profile.cluster.name
   instance_type               = "t2.medium"
   key_name                    = aws_key_pair.ssh_key.key_name

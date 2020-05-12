@@ -25,11 +25,6 @@ aws configure
 
 ```sh
 cd aws/rancher
-```
-
-Set the variables the _.env_ file
-
-```sh
 terraform init
 terraform state push .terraform/terraform.tfstate
 terraform apply
@@ -49,6 +44,18 @@ source .env
 terraform init
 terraform state push .terraform/terraform.tfstate
 terraform apply
+```
+
+If anything fails during the deployment, make sure you destroy before trying again.
+
+```sh
+terraform destroy
+```
+
+You may also need to remove `nodes` iam instance profile.
+
+```sh
+aws iam delete-instance-profile --instance-profile-name nodes
 ```
 
 ## Support
