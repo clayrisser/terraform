@@ -1,4 +1,4 @@
-resource "aws_security_group" "rancher" {
+resource "digitalocean_firewall" "rancher" {
   name        = var.name
   droplet_ids = [digitalocean_droplet.rancher.id]
   inbound_rule {

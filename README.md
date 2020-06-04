@@ -34,7 +34,7 @@ terraform apply
 
 ```sh
 cd aws/cluster
-cp .env.template .env
+cp example.env .env
 ```
 
 Set the variables the _.env_ file
