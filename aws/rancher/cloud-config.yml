@@ -40,6 +40,7 @@ write_files:
       export INSTANCE_ID=$(wget -qO- http://169.254.169.254/latest/meta-data/instance-id)
       wait-for-docker
       docker run -d --name rancher \
+        --restart unless-stopped \
         -v /var/lib/rancher:/var/lib/rancher \
         -p 80:80 -p 443:443 \
         rancher/rancher:${rancher_version} \

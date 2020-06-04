@@ -10,26 +10,17 @@ terraform {
     skip_requesting_account_id  = true
   }
 }
-# data "terraform_remote_state" "network" {
-#   backend = "s3"
-#   config = {
-#     access_key                  = "DP7HJ6T4LJAS4RMK2CWZ"
-#     bucket                      = "co.siliconhills.terraform"
-#     endpoint                    = "https://sfo2.digitaloceanspaces.com"
-#     key                         = "kube.siliconhills.co/kube"
-#     region                      = "us-east-1"
-#     secret_key                  = "hmD3s9ztKpuicFYB2o8zXZ7rwAupQKTl76yoLgJ1G6s"
-#     skip_credentials_validation = true
-#     skip_get_ec2_platforms      = true
-#     skip_metadata_api_check     = true
-#     skip_requesting_account_id  = true
-#   }
-# }
 provider "aws" {
   region = "us-east-1"
 }
 provider "digitalocean" {
-  token = var.token
+  token = var.digitalocean_token
+}
+provider "cloudflare" {
+  account_id = var.cloudflare_account_id
+  api_key    = var.cloudflare_api_key
+  email      = var.cloudflare_email
+  version    = "~> 2.0"
 }
 variable "region" {
   type    = string
@@ -51,12 +42,27 @@ variable "docker_version" {
   type    = string
   default = "19.03.8-ce"
 }
-variable "token" {
+variable "cloudflare_email" {
+  type    = string
+  default = "jam@siliconhills.dev"
+}
+variable "cloudflare_zone_id" {
+  type    = string
+  default = "88453939736b1a9e94de3b6da88b72c6"
+}
+variable "cloudflare_account_id" {
+  type    = string
+  default = "efeda46708f446060c9d22f956f7d76b"
+}
+variable "digitalocean_token" {
   type = string
 }
-variable "secret_key" {
+variable "digitalocean_secret_key" {
   type = string
 }
-variable "access_key" {
+variable "digitalocean_access_key" {
+  type = string
+}
+variable "cloudflare_api_key" {
   type = string
 }

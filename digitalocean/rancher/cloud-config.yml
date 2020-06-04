@@ -39,6 +39,7 @@ write_files:
       chown -R rancher:rancher /home/rancher
       wait-for-docker
       docker run -d --name rancher \
+        --restart unless-stopped \
         -v /var/lib/rancher:/var/lib/rancher \
         -p 80:80 -p 443:443 \
         rancher/rancher:${rancher_version} \

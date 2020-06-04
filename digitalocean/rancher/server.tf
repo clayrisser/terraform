@@ -3,12 +3,12 @@ resource "digitalocean_droplet" "rancher" {
   name               = "${var.name}-rancher"
   private_networking = true
   region             = var.region
-  size               = "1gb"
+  size               = "s-2vcpu-2gb"
   ssh_keys           = ["${digitalocean_ssh_key.ssh_key.id}"]
   user_data          = data.template_file.rancher_cloudconfig.rendered
   lifecycle {
     create_before_destroy = true
-    prevent_destroy = true
+    prevent_destroy = false
     ignore_changes = []
   }
 }

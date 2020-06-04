@@ -3,9 +3,10 @@ resource "digitalocean_floating_ip" "rancher" {
   region     = digitalocean_droplet.rancher.region
 }
 
-resource "digitalocean_record" "rancher" {
-  domain = var.domain
-  name = "${var.name}."
-  type = "A"
-  value = digitalocean_floating_ip.rancher.ip_address
+resource "cloudflare_record" "rancher" {
+  zone_id = var.cloudflare_zone_id
+  name    = var.name
+  ttl     = 3600
+  type    = "A"
+  value   = digitalocean_floating_ip.rancher.ip_address
 }
