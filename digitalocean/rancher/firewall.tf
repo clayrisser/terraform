@@ -29,7 +29,7 @@ resource "digitalocean_firewall" "rancher" {
 }
 
 resource "digitalocean_firewall" "nodes" {
-  name        = "${var.name}-nodes"
+  name        = "${var.name}-entrypoint"
   inbound_rule {
     protocol         = "tcp"
     port_range       = "22"
