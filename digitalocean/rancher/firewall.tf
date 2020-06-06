@@ -13,7 +13,7 @@ resource "digitalocean_firewall" "rancher" {
   }
   inbound_rule {
     protocol         = "tcp"
-    port_range       = "143"
+    port_range       = "443"
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
   outbound_rule {

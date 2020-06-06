@@ -9,4 +9,12 @@ resource "cloudflare_record" "rancher" {
   ttl     = 3600
   type    = "A"
   value   = digitalocean_floating_ip.rancher.ip_address
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy = true
+    ignore_changes = [
+      proxied,
+      ttl
+    ]
+  }
 }

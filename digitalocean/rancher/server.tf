@@ -8,7 +8,7 @@ resource "digitalocean_droplet" "rancher" {
   user_data          = data.template_file.rancher_cloudconfig.rendered
   lifecycle {
     create_before_destroy = true
-    prevent_destroy = false
+    prevent_destroy = true
     ignore_changes = []
   }
 }
