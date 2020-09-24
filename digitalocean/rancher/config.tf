@@ -36,7 +36,7 @@ variable "domain" {
 }
 variable "rancher_version" {
   type    = string
-  default = "v2.4.5"
+  default = "v2.4.8"
 }
 variable "docker_version" {
   type    = string
