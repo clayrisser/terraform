@@ -18,6 +18,4 @@ env:
 
 .PHONY: destroy
 destroy: .terraform/terraform.tfstate
-	@. ./.env && terraform destroy \
-	 -backend-config="access_key=$$TF_VAR_digitalocean_access_key" \
-	 -backend-config="secret_key=$$TF_VAR_digitalocean_secret_key"
+	@. ./.env && terraform destroy
