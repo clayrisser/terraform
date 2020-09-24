@@ -8,7 +8,7 @@ init: .env
 
 .PHONY: apply
 apply: .env .terraform/terraform.tfstate
-	@source ./.env && terraform apply
+	@. ./.env && terraform apply
 
 .PHONY: env
 env:
