@@ -1,8 +1,8 @@
 terraform {
   backend "s3" {
-    bucket                      = "dev.siliconhills"
+    bucket                      = "com.example"
     endpoint                    = "https://sfo2.digitaloceanspaces.com"
-    key                         = "terraform/kube.siliconhills.dev/kube"
+    key                         = "terraform/kube.example.com/kube"
     region                      = "us-east-1"
     skip_credentials_validation = true
     skip_get_ec2_platforms      = true
@@ -32,7 +32,7 @@ variable "name" {
 }
 variable "domain" {
   type    = string
-  default = "siliconhills.dev"
+  default = "example.com"
 }
 variable "rancher_version" {
   type    = string
@@ -44,7 +44,7 @@ variable "docker_version" {
 }
 variable "cloudflare_email" {
   type    = string
-  default = "jam@siliconhills.dev"
+  default = "jam@example.com"
 }
 variable "cloudflare_zone_id" {
   type    = string
