@@ -16,6 +16,10 @@ env:
 .env:
 	@$(MAKE) -s env
 
+.PHONY: push
+push:
+	@. ./.env && terraform state push .terraform/terraform.tfstate
+
 .PHONY: destroy
 destroy: .terraform/terraform.tfstate
 	@. ./.env && terraform destroy
