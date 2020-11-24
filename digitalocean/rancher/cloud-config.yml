@@ -1,57 +1,27 @@
-#cloud-config
-write_files:
-  - path: /etc/rc.local
-    permissions: "0755"
-    owner: root
-    content: |
-      #!/bin/bash
-      mkdir -p /var/log/boot
-      exec > /var/log/boot/cloud-config.log 2>&1
+#!/bin/bash
 
-      mkdir -p /home/rancher/backups
-      cat <<EOF > /home/rancher/backup.sh
-      #!/bin/sh
-      export DATE=\$(date '+%s')
-      export RANCHER_CONTAINER_NAME=rancher
-      export RANCHER_VERSION=${rancher_version}
+mkdir -p /var/log/boot
+exec > /var/log/boot/cloud-config.log 2>&1
 
-      docker stop \$RANCHER_CONTAINER_NAME
-      docker create --volumes-from \$RANCHER_CONTAINER_NAME --name rancher-data-\$DATE rancher/rancher:\$RANCHER_VERSION
-      docker run --volumes-from rancher-data-\$DATE -v \$PWD/backups:/backup busybox tar zcvf /backup/rancher-data-backup-"\$RANCHER_VERSION"-"\$DATE".tar.gz /var/lib/rancher
-      docker start \$RANCHER_CONTAINER_NAME
-      EOF
+# kubernetes
+curl -sfL https://get.k3s.io | sh -s - server --cluster-init
+kubectl config view --raw > ~/.kube/config
+curl -sfL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
-      cat <<EOF > /home/rancher/upgrade.sh
-      #!/bin/sh
-      export DATE=
-      export RANCHER_CONTAINER_NAME=rancher
-      export RANCHER_VERSION=${rancher_version}
+# cert manager
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+kubectl create namespace cert-manager
+kubectl apply --validate=false \
+  -f https://github.com/jetstack/cert-manager/releases/download/v1.0.4/cert-manager.crds.yaml
+helm install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --version v1.0.4
 
-      docker stop \$RANCHER_CONTAINER_NAME
-      docker rename \$RANCHER_CONTAINER_NAME "\$RANCHER_CONTAINER_NAME"_\$(date '+%s')
-      docker run -d --volumes-from rancher-data-\$DATE \
-        --restart=unless-stopped \
-        -p 80:80 -p 443:443 \
-        rancher/rancher:\$RANCHER_VERSION \
-        --acme-domain ${name}.${domain}
-      EOF
-
-      chown -R rancher:rancher /home/rancher
-      wait-for-docker
-      docker run -d --name rancher \
-        --restart unless-stopped \
-        -v /var/lib/rancher:/var/lib/rancher \
-        -p 80:80 -p 443:443 \
-        rancher/rancher:${rancher_version} \
-        --acme-domain ${name}.${domain}
-rancher:
-  console: ubuntu
-  docker:
-    engine: ${docker_version}
-    log_driver: "json-file"
-    log_opts:
-      max-file: "3"
-      max-size: "100m"
-      labels: "production"
-  services_include:
-    kernel-headers: true
+# rancher
+helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+kubectl create namespace cattle-system
+helm install rancher rancher-latest/rancher \
+  --version ${rancher_version} \
+  --namespace cattle-system \
+  --set hostname=${name}.${domain}

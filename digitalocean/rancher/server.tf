@@ -1,5 +1,5 @@
 resource "digitalocean_droplet" "rancher" {
-  image              = "rancheros"
+  image              = "ubuntu-20-04-x64"
   name               = "${var.name}-rancher"
   private_networking = true
   region             = var.region
